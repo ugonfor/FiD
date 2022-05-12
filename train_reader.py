@@ -50,9 +50,9 @@ def train(model, optimizer, scheduler, step, train_dataset, eval_dataset, opt, c
             (idx, labels, _, context_ids, context_mask) = batch
 
             train_loss = model(
-                input_ids=context_ids.cuda(),
-                attention_mask=context_mask.cuda(),
-                labels=labels.cuda()
+                input_ids=context_ids,    #.cuda(),
+                attention_mask=context_mask,    #.cuda(),
+                labels=labels    #.cuda()
             )[0]
 
             train_loss.backward()
@@ -130,6 +130,7 @@ if __name__ == "__main__":
     opt = options.parse()
     #opt = options.get_options(use_reader=True, use_optim=True)
 
+
     torch.manual_seed(opt.seed)
     src.slurm.init_distributed_mode(opt)
     src.slurm.init_signal_handler()
@@ -148,6 +149,13 @@ if __name__ == "__main__":
         opt.is_distributed,
         checkpoint_path / 'run.log'
     )
+
+    ###
+    # configure
+    print(opt)
+    opt.world_size = 1
+    opt.local_rank = 'cpu'
+    ###
 
     model_name = 't5-' + opt.model_size
     model_class = src.model.FiDT5

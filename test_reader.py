@@ -40,17 +40,29 @@ def evaluate(model, dataset, dataloader, tokenizer, opt):
                 model.reset_score_storage()
 
             outputs = model.generate(
-                input_ids=context_ids.cuda(),
-                attention_mask=context_mask.cuda(),
+                input_ids=context_ids    ,#.cuda(),
+                attention_mask=context_mask    ,#.cuda(),
                 max_length=50,
             )
 
+            ### custom 
+            print(outputs)
+            ###
+
             if opt.write_crossattention_scores:
-                crossattention_scores = model.get_crossattention_scores(context_mask.cuda())
+                crossattention_scores = model.get_crossattention_scores(context_mask    )#.cuda())
 
             for k, o in enumerate(outputs):
                 ans = tokenizer.decode(o, skip_special_tokens=True)
                 example = dataset.data[idx[k]]
+
+                ### custom 
+                print("ANSWER: ")
+                print(ans)
+                print("EXAMPLE: ")
+                print(example)
+                ###
+
                 if 'answers' in example:
                     score = src.evaluation.ems(ans, example['answers'])
                     exactmatch.append(score)
@@ -98,6 +110,11 @@ if __name__ == "__main__":
     if not directory_exists and opt.is_main:
         options.print_options(opt)
 
+    #####
+    # configure
+    opt.world_size = 1
+    if opt.model_path == None : opt.model_path = "t5-small"
+    #####
 
     tokenizer = transformers.T5Tokenizer.from_pretrained('t5-base', return_dict=False)
 
