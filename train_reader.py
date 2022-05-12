@@ -154,6 +154,7 @@ if __name__ == "__main__":
     # configure
     print(opt)
     opt.world_size = 1
+    opt.eval_freq = 50
     #opt.local_rank = 'cpu'
     ###
 
