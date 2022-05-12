@@ -11,8 +11,13 @@ for entity in toefl_data:
         ent = dict()
         ent['id'] = idx
         ent['question'] = entity['user_essay'][i]
-        ent['target'] = entity['edited_essay'][i]
-        ent['answers'] = entity['edited_essay'][i]
+
+        if entity['edited_essay'][i] == "":
+            ent['target'] = "deletion"
+            ent['answers'] = "deletion"
+        else:
+            ent['target'] = entity['edited_essay'][i]
+            ent['answers'] = entity['edited_essay'][i]
 
         ctxs = []
         ctx = {"title": "idea_suggestions", "text":  " ".join(entity['prompt']['idea_suggestions'])}
