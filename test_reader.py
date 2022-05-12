@@ -40,8 +40,8 @@ def evaluate(model, dataset, dataloader, tokenizer, opt):
                 model.reset_score_storage()
 
             outputs = model.generate(
-                input_ids=context_ids    ,#.cuda(),
-                attention_mask=context_mask    ,#.cuda(),
+                input_ids=context_ids.cuda(),
+                attention_mask=context_mask.cuda(),
                 max_length=50,
             )
 
@@ -50,7 +50,7 @@ def evaluate(model, dataset, dataloader, tokenizer, opt):
             ###
 
             if opt.write_crossattention_scores:
-                crossattention_scores = model.get_crossattention_scores(context_mask    )#.cuda())
+                crossattention_scores = model.get_crossattention_scores(context_mask.cuda())
 
             for k, o in enumerate(outputs):
                 ans = tokenizer.decode(o, skip_special_tokens=True)
