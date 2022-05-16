@@ -38,6 +38,10 @@ def evaluate(model, dataset, dataloader, tokenizer, opt):
 
             if opt.write_crossattention_scores:
                 model.reset_score_storage()
+            
+            ### custom
+            print(batch)
+            ###
 
             outputs = model.generate(
                 input_ids=context_ids.cuda(),

@@ -51,8 +51,17 @@ class Dataset(torch.utils.data.Dataset):
                 contexts = [question]
         else:
             passages, scores = None, None
-
-
+        
+        ### custom
+        print({
+            'index' : index,
+            'question' : question,
+            'target' : target,
+            'passages' : passages,
+            'scores' : scores
+        })
+        ###
+        
         return {
             'index' : index,
             'question' : question,
